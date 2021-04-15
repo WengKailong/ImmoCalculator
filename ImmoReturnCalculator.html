@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Return calculator</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/2a37bbe1cd.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="function.js"></script>
+    <script src="autoUpdate.js"></script>
+    <script src="immoObject.js"></script>
+    <script src="financingObject.js"></script>
+    <script src="initFinancing.js"></script>
+    <script src="analyseObject.js"></script>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+
+    <script type="text/javascript" src="loadPieCharts.js"></script>
+    <script type="text/javascript" src="loadTrendCharts.js"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Economica:wght@700&family=Raleway:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body onload="init()">
+    <div class="nav-bar-top">
+      <h1>Calculate return of your real estate investment</h1>
+      <span>Beta Version 1.0</span>
+    </div>
+    <div class="body-flex">
+      <div class="nav-bar-left">
+        <div class="nav-bar-item" id="nav-bar-objects">
+          <a href="#" onclick="setWindowAktiv('objects')"
+            ><i class="nav-bar-icon fas fa-home"></i><span>Objects</span></a
+          >
+        </div>
+        <div class="nav-bar-item" id="nav-bar-financing">
+          <a href="#" onclick="setWindowAktiv('financing')"
+            ><i class="nav-bar-icon fas fa-dollar-sign"></i
+            ><span>Financial plans</span></a
+          >
+        </div>
+        <div class="nav-bar-item" id="nav-bar-analyse">
+          <a href="#" onclick="setWindowAktiv('analyse')"
+            ><i class="nav-bar-icon far fa-chart-bar"></i
+            ><span>Financial analyse</span></a
+          >
+        </div>
+      </div>
+
+      <div class="gallery-body">
+        <div class="tab-function" id="tab-function">
+          <button class="button-function space-small" onclick="deleteConfirm()">
+            <i class="button-function-icon-small far fa-trash-alt"></i>
+            <div class="button-function-text">delete selected object</div>
+          </button>
+        </div>
+
+        <div class="gallery-show" id="show-objects">
+          <div class="gallery-show-elements" id="element-add-objects">
+            <h2>add a new object</h2>
+            <div class="gallery-row">
+              <div class="object-box box-small" onclick="initObject('')">
+                <button class="button-function space-big">
+                  <i class="button-function-icon fas fa-plus"></i>
+                  <div class="button-function-text">add a new object</div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-show-elements" id="element-saved-objects">
+            <h2>saved objects</h2>
+            <div class="gallery-row" id="gallery-row-objects">
+              <div
+                class="object-box box-big flex-column"
+                onclick="initObject('objectName')"
+              >
+                <div class="object-information-row">
+                  <i class="check-icon far fa-check-circle"></i>
+                  <span>object name</span>
+                </div>
+                <img
+                  class="object-bg-img"
+                  id="object-pic"
+                  src="./img/apartment.jpg"
+                />
+
+                <div class="object-information-row">
+                  <span>built in: </span>
+                  <span id="built-year"> </span>
+                </div>
+                <div class="object-information-row">
+                  <span>last modified: </span>
+                  <span id="last-change"> </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-show" id="show-financing">
+          <div class="gallery-show-elements" id="element-add-financing">
+            <h2>add a new financial plan</h2>
+            <div class="gallery-row">
+              <div class="object-box box-small" onclick="initFinancing('')">
+                <button class="button-function space-big">
+                  <i class="button-function-icon fas fa-plus"></i>
+                  <div class="button-function-text">
+                    add a new financial plan
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-show-elements" id="element-saved-financing">
+            <h2>saved financial plans of object:</h2>
+            <div class="gallery-row" id="gallery-row-objectName">
+              <div
+                class="object-box box-big flex-column"
+                onclick="initFinancing('Financial-plan-No.8')"
+              >
+                <div class="object-information-row">
+                  <i class="check-icon far fa-check-circle"></i>
+                  <span>${newObject.name}</span>
+                </div>
+                <div class="object-information-row">
+                  <span>${newObject.name}</span>
+                </div>
+                <img class="object-bg-img" src="img/finance.jpg" />
+                <div class="object-information-row">
+                  <span>Interest rate: </span>
+                </div>
+                <div class="object-information-row">
+                  <span>Fixed for: </span>
+                </div>
+                <div class="object-information-row">
+                  <span>last modified: </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-show" id="show-analyse">
+          <div class="window-white-row row-analyse">
+            <h2>Financial analyse of your investment</h2>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <div class="input-title">Select an object:</div>
+            <select
+              class="input-text"
+              name="object-type"
+              id="input-analyse-object"
+              onchange="updateInput('input-analyse-object')"
+              placehoder="please select an object"
+            >
+              <option selected="" selected disabled hidden>
+                select an object
+              </option>
+            </select>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <div class="input-title">Select a financial plan:</div>
+            <select
+              class="input-text"
+              name="object-type"
+              id="input-analyse-financing"
+              onchange="updateInput('input-analyse-financing')"
+              placehoder="please select a financial plan"
+            >
+              <option selected="" selected disabled hidden>
+                select a financial plan
+              </option>
+            </select>
+          </div>
+
+          <div class="window-white-row row-analyse row-flex">
+            <button
+              class="button-function space-big"
+              id="button-statistics-analyse"
+              onclick="showStatistics()"
+            >
+              <i class="button-function-icon fas fa-chart-line"></i>
+              <div class="button-function-text">show statistics</div>
+            </button>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <h3>Statistics of the financial plan:</h3>
+            <table class="table-wide" id="statistics-table">
+              <tr>
+                <th>Year</th>
+                <th>Rest loan amount</th>
+                <th>Interest payment</th>
+                <th>Redemption</th>
+                <th>Rent income</th>
+                <th>Cash flow</th>
+                <th>Object value</th>
+              </tr>
+            </table>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <h3>Return of your investment:</h3>
+            <table class="table-narrow" id="return-table">
+              <tr>
+                <th>Total investment:</th>
+              </tr>
+
+              <tr>
+                <th>Rest amount of loan:</th>
+              </tr>
+              
+
+              <tr>
+                <th>Sell price:</th>
+              </tr>
+
+              <tr>
+                <th>Sell profit:</th>
+              </tr>
+
+              <tr>
+                <th>Total rent income:</th>
+              </tr>
+
+              <tr>
+                <th>Profit(before tax) of investment:</th>
+              </tr>
+
+              <tr>
+                <th>Speculation tax(40%):</th>
+              </tr>
+
+              <tr>
+                <th>Annual profit rate:</th>
+              </tr>
+            </table>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <h3>Profits:</h3>
+            <div class="chart" id="chart-pie-income"></div>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <h3>Investment:</h3>
+            <div class="chart" id="chart-pie-spending"></div>
+            <div class="chart" id="chart-pie-costs"></div>
+          </div>
+
+          <div class="window-white-row row-analyse">
+            <h3>Mortgage payment:</h3>
+            <div class="chart" id="chart-trend-mortgage"></div>
+          </div>
+        </div>
+
+        <div class="full-screen-bg" id="full-screen-window">
+          <div class="full-screen-window-white" id="full-screen-window-object">
+            <div class="window-white-row-top">
+              <h2>Object information</h2>
+              <button
+                class="button-function space-big"
+                id="button-close-window"
+                onclick="closeWindow('full-screen-window-object')"
+              >
+                <i class="button-function-icon far fa-times-circle"></i>
+                <div class="button-function-text">Close</div>
+              </button>
+            </div>
+
+            <div class="window-white-row">
+              <div class="input-title">Object name:</div>
+              <input
+                type="text"
+                class="input-text"
+                id="input-object-name"
+                placeholder="e.g. Goethe Street No.1"
+              />
+            </div>
+            <div class="window-white-row">
+              <div class="input-title">Object type:</div>
+              <select
+                class="input-text"
+                name="object-type"
+                id="input-object-type"
+              >
+                <option value="" selected="" selected disabled hidden>
+                  select the type of this object
+                </option>
+                <option value="apartment">Apartment</option>
+                <option value="house">House</option>
+              </select>
+            </div>
+
+            <div class="window-white-row">
+              <div class="input-title">Object in which state:</div>
+              <select
+                class="input-text"
+                name="object-type"
+                id="input-object-state"
+                onchange="changeLandTaxRate()"
+              >
+                <option value="" selected="" selected disabled hidden>
+                  select in which state is this object located
+                </option>
+                <option value="bw">Baden-Württemberg</option>
+                <option value="by">Bayern</option>
+                <option value="brl">Berlin</option>
+                <option value="bra">Brandenburg</option>
+                <option value="bre">Bremen</option>
+                <option value="ham">Hamburg</option>
+                <option value="he">Hessen</option>
+                <option value="mkl">Mecklenburg-Vorpommern</option>
+                <option value="nds">Niedersachsen</option>
+                <option value="ndw">Nordreihn-Westfalen</option>
+                <option value="rp">Reihn-Pfalz</option>
+                <option value="sl">Saarland</option>
+                <option value="sas">Sachsen</option>
+                <option value="saa">Sachsen-Anhalt</option>
+                <option value="sh">Schleswig-Holstein</option>
+                <option value="th">Thüringen</option>
+              </select>
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Built in year:</div>
+              <input
+                type="number"
+                min="1900"
+                max="2021"
+                step="1"
+                class="input-text input-percentage"
+                id="input-object-built-year"
+                placeholder="e.g. 1960"
+              />
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Bought in year:</div>
+              <input
+                type="number "
+                min="1900"
+                max="2021"
+                step="1"
+                class="input-text input-percentage"
+                id="input-object-bought-year"
+                placeholder="e.g. 2021"
+              />
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Size of the object:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                id="input-object-size-object"
+                onchange="updateInput('input-object-size-object')"
+                placeholder="0"
+              />㎡
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Net price of the object:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-net-price-squaremeter"
+                placeholder="unit price"
+                onchange="updateInput('input-object-net-price-squaremeter')"
+              />€/㎡ or
+              <input
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-net-price-object"
+                placeholder="total price"
+                onchange="updateInput('input-object-net-price-object')"
+              />€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title">Net price of garage parking spot:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-net-price-parking"
+                value="0"
+                onchange="updateInput('input-object-net-price-parking')"
+              />€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title">
+                Additional costs(e.g. upgrade and renovation):
+              </div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-additional-costs"
+                value="0"
+                onchange="updateInput('input-object-additional-costs')"
+              />€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Brokerage fees:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.1"
+                value="3.75"
+                id="input-object-brokerage-fees-percentage"
+                onchange="updateInput('input-object-brokerage-fees-percentage')"
+              />%
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-brokerage-fees-euro"
+                onchange="updateInput('input-object-brokerage-fees-euro')"
+              ></span
+              >€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Land acquiring tax rate:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.1"
+                value="5"
+                id="input-object-land-tax-percentage"
+              />%
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-land-tax-euro"
+              ></span
+              >€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">
+                Notary and registration cost:
+              </div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.1"
+                value="1.5"
+                id="input-object-notary-percentage"
+              />%
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-notary-euro"
+              ></span
+              >€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">
+                Total purchase cost of the object:
+              </div>
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-object-total-price"
+              ></span
+              >€
+            </div>
+
+            <div class="window-white-row-bottom">
+              <button
+                class="button-function space-big"
+                id="button-save-object"
+                onclick="saveObject('objects')"
+              >
+                <i class="button-function-icon far fa-save"></i>
+                <div class="button-function-text">Save object</div>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="full-screen-window-white"
+            id="full-screen-window-add-financing"
+          >
+            <div class="window-white-row-top">
+              <h2 id="input-financing-name"></h2>
+              <button
+                class="button-function space-big"
+                id="button-close-window"
+                onclick="closeWindow('full-screen-window-add-financing')"
+              >
+                <i class="button-function-icon far fa-times-circle"></i>
+                <div class="button-function-text">Close</div>
+              </button>
+            </div>
+
+            <div class="window-white-row">
+              <div class="input-title">Please select an object:</div>
+              <select
+                class="input-text"
+                name="object-type"
+                id="input-financing-object"
+                onchange="updateInput('input-financing-object')"
+                placehoder="please select an object"
+              >
+                <option value="" selected="" selected disabled hidden>
+                  select an object
+                </option>
+              </select>
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">
+                Total purchase cost(incl. tax and notary):
+              </div>
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-financing-total-price"
+              ></span
+              >€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Down payment:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.1"
+                value="20"
+                id="input-financing-downpayment-percentage"
+                onchange="updateInput('input-financing-downpayment-percentage')"
+              />% or
+              <input
+                type="number"
+                class="input-text input-percentage"
+                value="0"
+                id="input-financing-downpayment-euro"
+                onchange="updateInput('input-financing-downpayment-euro')"
+              />€
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Total amount of loan:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                value="0"
+                id="input-financing-total-loan"
+                onchange="updateInput('input-financing-total-loan')"
+              />€ or
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-financing-total-loan-percentage"
+              ></span
+              >% of total cost of the object
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">
+                Effective annual interest rate:
+              </div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.01"
+                value="1.5"
+                id="input-financing-interest-rate"
+                onchange="updateInput('input-financing-interest-rate')"
+              />%
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Annual redemption rate:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="2"
+                max="5"
+                step="0.01"
+                value="2"
+                id="input-financing-redemption-rate"
+                onchange="updateInput('input-financing-redemption-rate')"
+              />% (minimum 2% per year)
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Monthly mortgage payment:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                step="0.1"
+                value="0"
+                id="input-financing-payment-month"
+                onchange="updateInput('input-financing-payment-month')"
+              />€/month or
+
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                step="0.1"
+                value="0"
+                id="input-financing-payment-year"
+                onchange="updateInput('input-financing-payment-year')"
+              />€/year
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Interest rate fixed in:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="1"
+                value="10"
+                id="input-financing-interest-fix-time"
+              />years
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Monthly rent income:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                value="0"
+                id="input-financing-rent-persqmeter"
+                onchange="updateInput('input-financing-rent-persqmeter')"
+              />€/㎡ or in total
+              <input
+                type="number"
+                class="input-text input-percentage"
+                value="0"
+                id="input-financing-rent-euro"
+                onchange="updateInput('input-financing-rent-euro')"
+              />€ of
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-financing-rent-object-size"
+              ></span
+              >㎡
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Rent raise per year:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.1"
+                value="0"
+                id="input-financing-rent-raise-1"
+                onchange="updateInput('input-financing-rent-raise-1')"
+              />% or in 3 years
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="15"
+                step="0.1"
+                value="0"
+                id="input-financing-rent-raise-3"
+                onchange="updateInput('input-financing-rent-raise-3')"
+              />% (max. 15% in 3 years)
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">
+                Object price raise per year:
+              </div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="0.1"
+                value="3"
+                id="input-financing-price-raise-object"
+                onchange="updateInput('input-financing-price-raise-object')"
+              />%
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">Object to be sold in:</div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                min="0"
+                max="100"
+                step="1"
+                value="10"
+                id="input-financing-sell-time"
+                onchange="updateInput('input-financing-sell-time')"
+              />years, in
+              <span
+                type="number"
+                class="input-text input-percentage"
+                id="input-financing-sell-year"
+              ></span
+              ><br />
+            </div>
+
+            <div
+              class="window-white-row row-flex alert-text"
+              id="input-object-speculation-text"
+            >
+              Attention: sell in 10 years comes speculation tax on top of your
+              profit!
+            </div>
+
+            <div class="window-white-row row-flex">
+              <div class="input-title row-flex">
+                Sell price(object plus garage):
+              </div>
+              <input
+                type="number"
+                class="input-text input-percentage"
+                value="0"
+                id="input-financing-sell-price"
+                onchange="updateInput('input-financing-sell-price')"
+              />€
+            </div>
+
+            <div class="window-white-row-bottom">
+              <button
+                class="button-function space-big"
+                id="button-save-object"
+                onclick="saveObject('financing')"
+              >
+                <i class="button-function-icon far fa-save"></i>
+                <div class="button-function-text">Save financial plan</div>
+              </button>
+
+              <button
+                class="button-function space-big"
+                id="button-save-as-new-object"
+                onclick="saveAsNew()"
+              >
+                <i class="button-function-icon far fa-window-restore"></i>
+                <div class="button-function-text">save as new plan</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
